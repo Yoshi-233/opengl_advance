@@ -1,0 +1,7 @@
+.git
+.idea
+*/.idea
+*/.git
+*/cmake-build-debug-wsl
+*/cmake-build-debug*
+**/cmake-build-debug*
