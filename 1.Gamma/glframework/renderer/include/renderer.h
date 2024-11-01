@@ -67,6 +67,51 @@ public:
         std::shared_ptr<Material> mGlobalMaterial{nullptr};
 
 private:
+        /* 各种材质渲染func */
+        static void phongMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                        const std::shared_ptr<Material> &material,
+                                        const std::shared_ptr<Camera> &camera,
+                                        const std::shared_ptr<Mesh> &mesh,
+                                        const std::shared_ptr<DirectionalLight> &directionalLight,
+                                        const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                        const std::shared_ptr<SpotLight> &spotLight,
+                                        const std::shared_ptr<AmbientLight> &ambientLight);
+
+        static void phongEnvMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                           const std::shared_ptr<Material> &material,
+                                           const std::shared_ptr<Camera> &camera,
+                                           const std::shared_ptr<Mesh> &mesh,
+                                           const std::shared_ptr<DirectionalLight> &directionalLight,
+                                           const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                           const std::shared_ptr<SpotLight> &spotLight,
+                                           const std::shared_ptr<AmbientLight> &ambientLight);
+
+        static void phongInstancedMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                                const std::shared_ptr<Material> &material,
+                                                const std::shared_ptr<Camera> &camera,
+                                                const std::shared_ptr<Mesh> &mesh,
+                                                const std::shared_ptr<DirectionalLight> &directionalLight,
+                                                const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                                const std::shared_ptr<SpotLight> &spotLight,
+                                                const std::shared_ptr<AmbientLight> &ambientLight);
+
+        static void grassInstancedMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                                 const std::shared_ptr<Material> &material,
+                                                 const std::shared_ptr<Camera> &camera,
+                                                 const std::shared_ptr<Mesh> &mesh,
+                                                 const std::shared_ptr<DirectionalLight> &directionalLight,
+                                                 const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                                 const std::shared_ptr<SpotLight> &spotLight,
+                                                 const std::shared_ptr<AmbientLight> &ambientLight);
+        static void opacityMaskMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                        const std::shared_ptr<Material> &material,
+                                        const std::shared_ptr<Camera> &camera,
+                                        const std::shared_ptr<Mesh> &mesh,
+                                        const std::shared_ptr<DirectionalLight> &directionalLight,
+                                        const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                        const std::shared_ptr<SpotLight> &spotLight,
+                                        const std::shared_ptr<AmbientLight> &ambientLight);
+private:
         // 渲染内部调用， 根据类型不同挑选
         std::shared_ptr<Shader> pickShader(MaterialType type);
 
@@ -75,68 +120,70 @@ private:
 
 private:
         /* 各种光照 */
-        static inline void processDirectionLight(const std::shared_ptr<Shader> &shaderPtr,
-                                                 const std::shared_ptr<DirectionalLight> &directionalLight);
+        static void processDirectionLight(const std::shared_ptr<Shader> &shaderPtr,
+                                          const std::shared_ptr<DirectionalLight> &directionalLight);
 
-        static inline void processPointLight(const std::shared_ptr<Shader> &shaderPtr,
-                                             const std::shared_ptr<PointLight> &pointLight);
+        static void processPointLight(const std::shared_ptr<Shader> &shaderPtr,
+                                      const std::shared_ptr<PointLight> &pointLight);
 
-        static inline void processPointLight(const std::shared_ptr<Shader> &shaderPtr,
-                                             const std::vector<std::shared_ptr<PointLight>> &pointLights);
+        static void processPointLight(const std::shared_ptr<Shader> &shaderPtr,
+                                      const std::vector<std::shared_ptr<PointLight>> &pointLights);
 
-        static inline void processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
-                                            const std::shared_ptr<SpotLight> &spotLight);
+        static void processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
+                                     const std::shared_ptr<SpotLight> &spotLight);
 
-        static inline void processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
-                                            const std::vector<std::shared_ptr<SpotLight>> &spotLights);
+        static void processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
+                                     const std::vector<std::shared_ptr<SpotLight>> &spotLights);
 
-        static inline void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
-                                               PhongMaterial *phongMaterial);
+        static void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
+                                        PhongMaterial *phongMaterial);
 
-        static inline void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
-                                               PhongEnvMaterial *phongMaterial);
+        static void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
+                                        PhongEnvMaterial *phongMaterial);
 
-        static inline void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
-                                               PhongInstancedMaterial *phongMaterial);
+        static void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
+                                        PhongInstancedMaterial *phongMaterial);
 
-        static inline void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
-                                               GrassInstancedMaterial *phongMaterial);
+        static void processSpecularMask(const std::shared_ptr<Shader> &shaderPtr,
+                                        GrassInstancedMaterial *phongMaterial);
 
 private:
-        static inline void processCommonInfo(const std::shared_ptr<Shader> &shaderPtr,
+        static void processCommonInfo(const std::shared_ptr<Shader> &shaderPtr,
                                              const std::shared_ptr<Camera> &camera,
                                              const std::shared_ptr<Mesh> &mesh);
 
-        static inline void processAmbientShiness(const std::shared_ptr<Shader> &shaderPtr,
-                                                 const std::shared_ptr<AmbientLight> &ambientLight);
+        static void processAmbientShiness(const std::shared_ptr<Shader> &shaderPtr,
+                                          const std::shared_ptr<AmbientLight> &ambientLight);
 
 private:
-        static inline void setDepthStatus(const std::shared_ptr<Material> &material);
+        /* 设置状态 */
+        static void setDepthStatus(const std::shared_ptr<Material> &material);
 
-        static inline void setPolygonOffsetStatus(const std::shared_ptr<Material> &material);
+        static void setPolygonOffsetStatus(const std::shared_ptr<Material> &material);
 
-        static inline void setStencilStatus(const std::shared_ptr<Material> &material);
+        static void setStencilStatus(const std::shared_ptr<Material> &material);
 
-        static inline void setBlendStatus(const std::shared_ptr<Material> &material);
+        static void setBlendStatus(const std::shared_ptr<Material> &material);
 
         void setGLInitStatus(const std::shared_ptr<Scene> &scene, const std::shared_ptr<Camera> &camera);
 
-        static inline void setGLStatus(const std::shared_ptr<Material> &material);
+        static void setGLStatus(const std::shared_ptr<Material> &material);
 
-        static inline void setFaceCullingStatus(const std::shared_ptr<Material> &material);
+        static void setFaceCullingStatus(const std::shared_ptr<Material> &material);
 
 private:
-        static inline void processWhiteMaterial(const std::shared_ptr<Shader> &shaderPtr,
-                                                const std::shared_ptr<Mesh> &mesh,
-                                                const std::shared_ptr<Camera> &camera);
+        /* 处理不同材质对应相机的渲染 */
+        static void processWhiteMaterial(const std::shared_ptr<Shader> &shaderPtr,
+                                         const std::shared_ptr<Mesh> &mesh,
+                                         const std::shared_ptr<Camera> &camera);
 
-        static inline void processDepthMaterial(const std::shared_ptr<Shader> &shaderPtr,
-                                                const std::shared_ptr<Mesh> &mesh,
-                                                const std::shared_ptr<Camera> &camera);
+        static void processDepthMaterial(const std::shared_ptr<Shader> &shaderPtr,
+                                         const std::shared_ptr<Mesh> &mesh,
+                                         const std::shared_ptr<Camera> &camera);
 
-        static inline void processCubeMaterial(const std::shared_ptr<Shader> &shaderPtr,
-                                               const std::shared_ptr<Mesh> &mesh,
-                                               const std::shared_ptr<Camera> &camera);
+        static void processCubeMaterial(const std::shared_ptr<Shader> &shaderPtr,
+                                        const std::shared_ptr<Mesh> &mesh,
+                                        const std::shared_ptr<Camera> &camera);
 
 
 private:
