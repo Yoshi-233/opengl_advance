@@ -185,7 +185,7 @@ void prepareAll()
         float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
         glm::vec3 tangent;
         tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        tangent.y = f * (deltaUV2.y * edge1.y + deltaUV1.y * edge2.y);
+        tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
         tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
 
         for (int i = 0; i < 4; i++) {
@@ -199,9 +199,10 @@ void prepareAll()
         auto planeMat = std::make_shared<PhongNormalMaterial>();
         planeMat->setDiffuse(std::make_shared<Texture>("assets/textures/normal/brickwall.jpg",
                                                        0, GL_SRGB_ALPHA));
-        planeMat->setNormalMap(std::make_shared<Texture>("assets/textures/normal/normal_map.png", 1));
-        planeMat->setShiness(32.0f);
+        planeMat->setNormalMap(std::make_shared<Texture>("assets/textures/normal/normal_map.png", 2));
+        planeMat->setShiness(64.0f);
         auto planeMesh = std::make_shared<Mesh>(planeGeo, planeMat);
+        planeMesh->rotateX(-90.0f);
         sceneOffScreen->addChild(planeMesh);
 
         // pass 02
@@ -213,7 +214,7 @@ void prepareAll()
 
         /* 创建平行光 */
         directionalLight = std::make_shared<DirectionalLight>();
-        directionalLight->setDirection(glm::vec3(0.0f, 0.0f, -1.0f));
+        directionalLight->setDirection(glm::vec3(0.0f, -1.0f, -0.0f));
         directionalLight->setSpecularIntensity(1.0f);
 
         /* 创建环境光 */

@@ -118,8 +118,7 @@ Geometry::Geometry(const std::vector<float> &positions, const std::vector<float>
         this->mIndicesCount = static_cast<int>(indices.size());
         // create vbo
         GLuint &posVbo = this->mPosVbo, &uvVbo = this->mUvVbo,
-                &normalVbo = this->mNormalVbo, &colorVbo = this->mColorVbo,
-                &tangentVbo = this->mTangentVbo;
+                &normalVbo = this->mNormalVbo, &tangentVbo = this->mTangentVbo;
 
         /* pos vbo创建 */
         glGenBuffers(1, &posVbo);
