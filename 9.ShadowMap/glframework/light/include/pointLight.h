@@ -8,11 +8,11 @@
 #include "light.h"
 #include "../../include/object.h"
 
-class PointLight : public Light, public Object {
+class PointLight : public Light {
 public:
         PointLight() = default;
 
-        virtual ~PointLight() override = default;
+        ~PointLight() override = default;
 
         [[nodiscard]] float getKc() const;
 

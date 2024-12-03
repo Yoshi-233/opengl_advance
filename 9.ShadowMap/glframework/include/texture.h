@@ -18,6 +18,8 @@ public:
 
         static std::shared_ptr<Texture> createColorAttachment(unsigned int unit, int width, int height);
 
+        static std::shared_ptr<Texture> createDepthAttachment(unsigned int unit, int width, int height);
+
         static std::shared_ptr<Texture> createDepthStencilAttachment(unsigned int unit, int width, int height);
 public:
         Texture(const std::string &path, unsigned int unit, unsigned int internalFormat = GL_RGBA);

@@ -82,6 +82,12 @@ glm::mat4 Object::getModelMatrix() const
         return transform;
 }
 
+glm::vec3 Object::getDirection() const
+{
+        auto modelMatrix = glm::mat3(this->getModelMatrix());
+        return glm::normalize(-modelMatrix[2]);
+}
+
 void Object::addChild(const std::shared_ptr<Object>& child)
 {
         // 1. 检查是否加入过
@@ -110,5 +116,6 @@ ObjectType Object::getType() const
 {
         return this->mType;
 }
+
 
 

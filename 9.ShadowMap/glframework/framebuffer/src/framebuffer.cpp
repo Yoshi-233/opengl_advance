@@ -41,3 +41,32 @@ Framebuffer::~Framebuffer()
                 glDeleteFramebuffers(1, &this->mFBO);
         }
 }
+
+std::shared_ptr<Framebuffer> Framebuffer::createShadowFbo(int width, int height)
+{
+        auto fb =  std::make_shared<Framebuffer>();
+        fb->mWidth = width;
+        fb->mHeight = height;
+        /* 1.生成FBO对象并且绑定 */
+        glGenFramebuffers(1, &fb->mFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, fb->mFBO);
+
+        /* 2.创建深度附件，加入fbo */
+        fb->mDepthAttachment
+                = Texture::createDepthAttachment(0, fb->mWidth, fb->mHeight);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                               fb->mDepthAttachment->getTextureID(), 0);
+
+        /* 3.检查fbo是否正确生成 */
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+                ERROR("Framebuffer not complete!");
+        }
+
+        // 禁止渲染到颜色缓冲, 显式声明
+        glDrawBuffer(GL_NONE);
+
+        /* 4.解绑fbo */
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        return fb;
+}

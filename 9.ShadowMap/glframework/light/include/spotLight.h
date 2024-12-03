@@ -8,15 +8,11 @@
 #include "light.h"
 #include "../../include/object.h"
 
-class SpotLight : public Light, public Object {
+class SpotLight : public Light {
 public:
         SpotLight();
 
-        virtual ~SpotLight() override = default;
-
-        const glm::vec3 &getTargetDirection() const;
-
-        void setTargetDirection(const glm::vec3 &targetDirection);
+        ~SpotLight() override = default;
 
         float getInnerAngle() const;
 
@@ -27,7 +23,6 @@ public:
         void setOuterAngle(float outerAngle);
 
 private:
-        glm::vec3 mTargetDirection{-1.0f};
         float mInnerAngle{0.0f};
         float mOuterAngle{0.0f};
 };

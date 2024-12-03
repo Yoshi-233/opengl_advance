@@ -28,6 +28,7 @@
 #include "glframework/materials/include/cubeMaterial.h"
 #include "glframework/materials/advanced/include/phongNormalMaterial.h"
 #include "glframework/materials/advanced/include/phongParallaxMaterial.h"
+#include "glframework/materials/advanced/include/phongShadowMaterial.h"
 #include "glframework/mesh/include/mesh.h"
 #include "glframework/mesh/include/instanceMesh.h"
 #include "glframework/include/scene.h"
@@ -65,7 +66,7 @@ std::shared_ptr<Framebuffer> framebuffer;
 std::shared_ptr<GrassInstancedMaterial> grassMaterial;
 
 /* advance */
-std::shared_ptr<PhongParallaxMaterial> mat;
+// std::shared_ptr<PhongParallaxMaterial> mat;
 
 static void prepareCamera()
 {
@@ -144,26 +145,37 @@ void prepareAll()
         sceneOffScreen = std::make_shared<Scene>();
 
         // pass 01
-        auto geo = Geometry::createPlane(2.5f, 2.5f);
-        auto matTest = std::make_shared<PhongMaterial>();
-        matTest->setDiffuse(std::make_shared<Texture>("assets/textures/parallax/bricks.jpg",
+        auto geo = Geometry::createBox(2.0f);
+        auto mat = std::make_shared<PhongShadowMaterial>();
+        mat->setDiffuse(std::make_shared<Texture>("assets/textures/parallax/bricks.jpg",
                                                   0, GL_SRGB_ALPHA));
-        // mat->setNormalMap(std::make_shared<Texture>("assets/textures/parallax/bricks_normal.jpg", 2));
-        // mat->setParallaxMap(std::make_shared<Texture>("assets/textures/parallax/disp.jpg", 3));
-        matTest->setShiness(32.0f);
-        auto mesh = std::make_shared<Mesh>(geo, matTest);
+        mat->setShiness(32.0f);
+        auto mesh = std::make_shared<Mesh>(geo, mat);
         sceneOffScreen->addChild(mesh);
+
+        auto groundGeo = Geometry::createPlane(10.0f, 10.0f);
+        mat = std::make_shared<PhongShadowMaterial>();
+        mat->setDiffuse(std::make_shared<Texture>("assets/textures/grass.jpg",
+                                                      0, GL_SRGB_ALPHA));
+        mat->setShiness(32.0f);
+        auto groundMesh = std::make_shared<Mesh>(groundGeo, mat);
+        groundMesh->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+        groundMesh->rotateX(-90.0f);
+        sceneOffScreen->addChild(groundMesh);
 
         // pass 02
         auto sgeo = Geometry::createScreenPlane();
         auto smat = std::make_shared<ScreenMaterial>();
         smat->mScreenTexture = framebuffer->mColorAttachment;
+        // smat->mScreenTexture = renderer->mShadowFBO->mDepthAttachment;
         auto smesh = std::make_shared<Mesh>(sgeo, smat);
         sceneInScreen->addChild(smesh);
 
         /* 创建平行光 */
         directionalLight = std::make_shared<DirectionalLight>();
-        directionalLight->setDirection(glm::vec3(0.0f, -0.4f, -1.0f));
+        directionalLight->setPosition(glm::vec3(3.0f, 3.0f, 3.0f));
+        directionalLight->rotateY(45.0f); // 逆时针45度
+        directionalLight->rotateX(-45.0f);
         directionalLight->setSpecularIntensity(1.0f);
 
         /* 创建环境光 */
@@ -235,16 +247,6 @@ void renderImgui()
         ImGui::Begin("Test");
         ImGui::ColorEdit3("clear color", glm::value_ptr(clearColor)); // 初始值为黑色
         ImGui::End();
-
-        // ImGui::Begin("MaterialEditor");
-        // float heightScale = mat->getHeightScale();
-        // ImGui::SliderFloat("height scale", &heightScale, 0.0f, 1.0f);
-        // mat->setHeightScale(heightScale);
-        //
-        // float layerNum = mat->getLayerNum();
-        // ImGui::InputFloat("layer num", &layerNum);
-        // mat->setLayerNum(layerNum);
-        // ImGui::End();
 
         /* 3. 执行渲染 */
         ImGui::Render();

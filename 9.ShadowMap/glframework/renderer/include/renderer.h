@@ -19,7 +19,10 @@
 #include "../../materials/include/phongEnvMaterial.h"
 #include "../../materials/include/phongInstancedMaterial.h"
 #include "../../materials/include/grassInstancedMaterial.h"
+
 #include "../../../application/camera/include/camera.h"
+
+#include "../../framebuffer/include/framebuffer.h"
 
 
 class Renderer {
@@ -59,6 +62,12 @@ public:
                           const std::shared_ptr<SpotLight> &spotLight,
                           const std::shared_ptr<AmbientLight> &ambientLight);
 
+
+        void renderShadowMap(const std::vector<std::shared_ptr<Mesh>> &meshes,
+                             const std::shared_ptr<DirectionalLight> &directionalLight,
+                             const std::shared_ptr<Framebuffer> &fbo);
+
+        static glm::mat4 getLightMatrix(const std::shared_ptr<DirectionalLight> &directionalLight) ;
 public:
         static void setClearColor(const glm::vec3 &color);
 
@@ -125,6 +134,15 @@ private:
                                               const std::shared_ptr<AmbientLight> &ambientLight);
 
         static void phongParallaxMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                                const std::shared_ptr<Material> &material,
+                                                const std::shared_ptr<Camera> &camera,
+                                                const std::shared_ptr<Mesh> &mesh,
+                                                const std::shared_ptr<DirectionalLight> &directionalLight,
+                                                const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                                const std::shared_ptr<SpotLight> &spotLight,
+                                                const std::shared_ptr<AmbientLight> &ambientLight);
+
+        void phongShadowMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
                                                 const std::shared_ptr<Material> &material,
                                                 const std::shared_ptr<Camera> &camera,
                                                 const std::shared_ptr<Mesh> &mesh,
@@ -216,12 +234,16 @@ private:
         /* advance */
         std::shared_ptr<Shader> mPhongNormalShader{nullptr};
         std::shared_ptr<Shader> mPhongParallaxShader{nullptr};
+        std::shared_ptr<Shader> mShadowShader{nullptr};
+        std::shared_ptr<Shader> mPhongShadowShader{nullptr};
 
 private:
         /* 不透明物体和透明物体的队列 */
         // 注意：每一次渲染，都会清空队列
         std::vector<std::shared_ptr<Mesh>> mOpacityObjects{};
         std::vector<std::shared_ptr<Mesh>> mTransparentObjects{};
+public:
+        std::shared_ptr<Framebuffer> mShadowFBO{nullptr};
 
 };
 

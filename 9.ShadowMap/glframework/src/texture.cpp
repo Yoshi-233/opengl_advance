@@ -190,6 +190,31 @@ std::shared_ptr<Texture> Texture::createColorAttachment(unsigned int unit, int w
         return std::make_shared<Texture>(unit, width, height);
 }
 
+std::shared_ptr<Texture> Texture::createDepthAttachment(unsigned int unit, int width, int height)
+{
+        std::shared_ptr<Texture> dTexture = std::make_shared<Texture>();
+
+        unsigned int depth;
+        glGenTextures(1, &depth);
+        glBindTexture(GL_TEXTURE_2D, depth);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height,
+                     0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        dTexture->mTexture = depth;
+        dTexture->mUnit = unit;
+        dTexture->mWidth = width;
+        dTexture->mHeight = height;
+
+        return dTexture;
+}
+
+
 std::shared_ptr<Texture> Texture::createDepthStencilAttachment(unsigned int unit, int width, int height)
 {
         std::shared_ptr<Texture> dsTexture = std::make_shared<Texture>();

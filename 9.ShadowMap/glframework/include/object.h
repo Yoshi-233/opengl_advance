@@ -17,32 +17,43 @@ enum class ObjectType {
 class Object : public std::enable_shared_from_this<Object> {
 public:
         Object();
+
         virtual ~Object();
 
 public:
         void setPosition(glm::vec3 pos);
+
         glm::vec3 getPosition();
 
 public:
         // 增量旋转
         void rotateX(float angle);
+
         void rotateY(float angle);
+
         void rotateZ(float angle);
 
         // 绝对旋转
         void setAngleX(float angle);
+
         void setAngleY(float angle);
+
         void setAngleZ(float angle);
 
         void setScale(glm::vec3 scale);
 
         glm::mat4 getModelMatrix() const;
 
+        glm::vec3 getDirection() const;
+
 public:
         /* 父子关系 */
-        void addChild(const std::shared_ptr<Object>& child);
+        void addChild(const std::shared_ptr<Object> &child);
+
         std::vector<std::shared_ptr<Object>> getChildren();
+
         std::shared_ptr<Object> getParent();
+
 public:
         ObjectType getType() const;
 
@@ -55,6 +66,7 @@ protected:
         float mAngleZ{0.0f};
 
         glm::vec3 mScale{1.0f};
+
 protected:
         /* 父子关系 */
         std::vector<std::shared_ptr<Object>> mChildren{};

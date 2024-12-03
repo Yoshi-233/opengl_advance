@@ -20,7 +20,8 @@ enum class MaterialType {
 
         /* advanded */
         PhongNormalMaterial,
-        PhongParallaxMaterial
+        PhongParallaxMaterial,
+        PhongShadowMaterial
 };
 
 class Material {

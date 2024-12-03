@@ -76,7 +76,7 @@ void Renderer::processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
         shaderPtr->setFloat("spotLight.specularIntensity",
                             spotLight->getSpecularIntensity());
         shaderPtr->setVectorFloat("spotLight.targetDirection",
-                                  spotLight->getTargetDirection());
+                                  spotLight->getDirection());
         // 下面是弧度值
         shaderPtr->setFloat("spotLight.innerLine",
                             glm::cos(glm::radians(spotLight->getInnerAngle())));
@@ -101,7 +101,7 @@ void Renderer::processSpotLight(const std::shared_ptr<Shader> &shaderPtr,
                 shaderPtr->setFloat(baseName + ".specularIntensity",
                                     spotLights[i]->getSpecularIntensity());
                 shaderPtr->setVectorFloat(baseName + ".targetDirection",
-                                          spotLights[i]->getTargetDirection());
+                                          spotLights[i]->getDirection());
                 // 下面是弧度值
                 shaderPtr->setFloat(baseName + ".innerLine",
                                     glm::cos(glm::radians(spotLights[i]->getInnerAngle())));

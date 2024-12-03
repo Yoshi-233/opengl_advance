@@ -6,12 +6,13 @@
 #define RENDERER_LIGHT_H
 
 #include "../../include/core.h"
+#include "../../include/object.h"
 
-class Light {
+class Light : public Object {
 public:
         Light() = default;
 
-        virtual ~Light() = default;
+        ~Light() override = default;
 
         [[nodiscard]] glm::vec3 getColor() const;
 

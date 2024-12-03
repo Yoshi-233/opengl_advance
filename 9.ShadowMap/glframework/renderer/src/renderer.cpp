@@ -72,6 +72,17 @@ Renderer::Renderer()
         this->mPhongParallaxShader = std::make_shared<Shader>(vertexPath.c_str(),
                                                               fragmentPath.c_str());
 
+        vertexPath = std::string(PROJECT_DIR) + "/assets/shaders/advanced/shadow.vert";
+        fragmentPath = std::string(PROJECT_DIR) + "/assets/shaders/advanced/shadow.frag";
+        this->mShadowShader = std::make_shared<Shader>(vertexPath.c_str(),
+                                                              fragmentPath.c_str());
+        this->mShadowFBO = Framebuffer::createShadowFbo(2048, 2048);
+
+        vertexPath = std::string(PROJECT_DIR) + "/assets/shaders/advanced/phongShadow.vert";
+        fragmentPath = std::string(PROJECT_DIR) + "/assets/shaders/advanced/phongShadow.frag";
+        this->mPhongShadowShader = std::make_shared<Shader>(vertexPath.c_str(),
+                                                              fragmentPath.c_str());
+
 }
 
 Renderer::~Renderer()
@@ -109,12 +120,15 @@ std::shared_ptr<Shader> Renderer::pickShader(MaterialType type)
                 case MaterialType::CubeMaterial:
                         result = this->mCubeMapShader;
                         break;
-                        /* advanced */
+                /* advanced */
                 case MaterialType::PhongNormalMaterial:
                         result = this->mPhongNormalShader;
                         break;
                 case MaterialType::PhongParallaxMaterial:
                         result = this->mPhongParallaxShader;
+                        break;
+                case MaterialType::PhongShadowMaterial:
+                        result = this->mPhongShadowShader;
                         break;
                 default:
                         ERROR("Unsupported material type: {}", static_cast<int>(type));
@@ -179,6 +193,9 @@ void Renderer::render(const std::shared_ptr<Scene> &scene,
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
         /* 1.初始化 */
         Renderer::setGLInitStatus(scene, camera);
+
+        /* 渲染shadowmap */
+        this->renderShadowMap(this->mOpacityObjects, directionalLight, this->mShadowFBO);
 
         /* 2. 渲染两个队列, 注意必须按照顺序渲染 */
         /* 2.1 不透明物体 */
@@ -304,6 +321,12 @@ void Renderer::renderObject(const std::shared_ptr<Object> &object, const std::sh
                                 break;
                         case MaterialType::PhongParallaxMaterial: {
                                 Renderer::phongParallaxMaterialRender(shaderPtr, material, camera, mesh,
+                                                                      directionalLight, pointLights,
+                                                                      spotLight, ambientLight);
+                        }
+                                break;
+                        case MaterialType::PhongShadowMaterial: {
+                                Renderer::phongShadowMaterialRender(shaderPtr, material, camera, mesh,
                                                                       directionalLight, pointLights,
                                                                       spotLight, ambientLight);
                         }

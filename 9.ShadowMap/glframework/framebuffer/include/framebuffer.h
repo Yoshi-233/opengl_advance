@@ -10,17 +10,22 @@
 
 class Framebuffer {
 public:
+        Framebuffer() = default;
         Framebuffer(int width, int height);
 
         ~Framebuffer();
+public:
+        static std::shared_ptr<Framebuffer> createShadowFbo(int width, int height);
 
 public:
-        int mWidth;
-        int mHeight;
+        int mWidth{};
+        int mHeight{};
 
         unsigned int mFBO{};
         std::shared_ptr<Texture> mColorAttachment;
         std::shared_ptr<Texture> mDepthStencilAttachment;
+
+        std::shared_ptr<Texture> mDepthAttachment;
 
 };
 

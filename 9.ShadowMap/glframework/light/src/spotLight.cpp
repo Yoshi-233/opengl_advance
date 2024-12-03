@@ -7,15 +7,6 @@
 SpotLight::SpotLight()
 = default;
 
-const glm::vec3 &SpotLight::getTargetDirection() const
-{
-        return this->mTargetDirection;
-}
-
-void SpotLight::setTargetDirection(const glm::vec3 &targetDirection)
-{
-        this->mTargetDirection = targetDirection;
-}
 
 float SpotLight::getInnerAngle() const
 {

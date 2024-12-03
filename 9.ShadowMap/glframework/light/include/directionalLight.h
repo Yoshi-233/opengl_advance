@@ -13,13 +13,6 @@ public:
 
         ~DirectionalLight() override = default;
 
-        [[nodiscard]] glm::vec3 getDirection() const { return mDirection; }
-
-        void setDirection(const glm::vec3& direction) { mDirection = direction; }
-
-protected:
-        glm::vec3 mDirection{-1.0f, -1.0f, -1.0f};
-
 };
 
 #endif //RENDERER_DIRECTIONALLIGHT_H
