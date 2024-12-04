@@ -15,6 +15,6 @@ public:
         std::shared_ptr<Framebuffer> mRenderTarget{nullptr};
 
         float mBias{0.0003f};
+        float mPcfRadius{0.01f}; // pcf radius, pcf采样半径
         float mDiskTightness{1.0f}; // shadow disk thickness, 阴影圆盘厚度
-        float mPcfRadius{0.1f}; // pcf radius, pcf采样半径
 };

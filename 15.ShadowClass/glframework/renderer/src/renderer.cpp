@@ -81,7 +81,6 @@ Renderer::Renderer()
         fragmentPath = std::string(PROJECT_DIR) + "/assets/shaders/advanced/phongShadow.frag";
         this->mPhongShadowShader = std::make_shared<Shader>(vertexPath.c_str(),
                                                               fragmentPath.c_str());
-
 }
 
 Renderer::~Renderer()

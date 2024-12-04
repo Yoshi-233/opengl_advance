@@ -20,9 +20,8 @@ void Renderer::phongShadowMaterialRender(const std::shared_ptr<Shader> &shaderPt
 {
         auto phongMaterial = (PhongShadowMaterial *) material.get();
         auto dirShadow = std::dynamic_pointer_cast<DirectionalLightShadow>(directionalLight->mShadow);
-        // diffuse贴图
-        // 设置sampler采样第0号纹理，注意这里默认是0
-        // 图片
+
+        /* diffuse贴图 */
         CHECK_POINTER_RETURN_VOID(phongMaterial->getDiffuse());
         shaderPtr->setInt("sampler", 0);
         phongMaterial->getDiffuse()->bind();

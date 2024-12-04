@@ -10,5 +10,5 @@ public:
 
         void setRenderTargetSize(int width, int height) override;
 
-        glm::mat4 getLightMatrix(glm::mat4 lightModelMatrix) const;
+        [[nodiscard]] glm::mat4 getLightMatrix(glm::mat4 lightModelMatrix) const;
 };

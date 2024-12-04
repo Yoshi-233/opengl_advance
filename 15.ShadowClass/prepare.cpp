@@ -249,7 +249,12 @@ void renderImgui()
         ImGui::SliderFloat("Bias", &directionalLight->mShadow->mBias, 0.0f, 0.01f, "%.4f"); // 初始值为(0,0,0)
         ImGui::SliderFloat("Tightness", &directionalLight->mShadow->mDiskTightness, 0.0f, 1.0f, "%.3f");
         ImGui::SliderFloat("PcfRadius", &directionalLight->mShadow->mPcfRadius, 0.0f, 1.0f, "%.4f");
-
+        auto width = directionalLight->mShadow->mRenderTarget->mWidth;
+        auto height = directionalLight->mShadow->mRenderTarget->mHeight;
+        if(ImGui::SliderInt("ShadowMapWidth", &width, 100, 4096) ||
+           ImGui::SliderInt("ShadowMapHeight", &height, 100, 4096)) {
+                directionalLight->mShadow->setRenderTargetSize(width, height);
+        }
         ImGui::End();
 
         /* 3. 执行渲染 */
