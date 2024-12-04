@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(PROJ_NAME "shadowmap")
+set(PROJ_NAME "ShadowMap")
 project(${PROJ_NAME})
 
 # 外部资源copy cmake
