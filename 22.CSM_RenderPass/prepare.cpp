@@ -150,17 +150,17 @@ void prepareAll()
         // pass 01
         auto groundGeo = Geometry::createPlane(20.0f, 500.0f);
         auto mat = std::make_shared<PhongCSMShadowMaterial>();
-        mat->setDiffuse(std::make_shared<Texture>("assets/textures/wall.jpg",0, GL_SRGB_ALPHA));
+        mat->setDiffuse(std::make_shared<Texture>("assets/textures/wall.jpg", 0, GL_SRGB_ALPHA));
         mat->setShiness(32.0f);
         auto groundMesh = std::make_shared<Mesh>(groundGeo, mat);
         groundMesh->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
         groundMesh->rotateX(-90.0f);
         sceneOffScreen->addChild(groundMesh);
 
-        for(int i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
                 auto geo = Geometry::createBox(1.5f);
                 auto mesh = std::make_shared<Mesh>(geo, mat);
-                mesh->setPosition(glm::vec3((float)(i % 3)* 3.0f, 0.0f, -(float)i / 3.0f * 3.0f));
+                mesh->setPosition(glm::vec3((float) (i % 3) * 3.0f, 0.0f, -(float) i / 3.0f * 3.0f));
                 sceneOffScreen->addChild(mesh);
         }
 

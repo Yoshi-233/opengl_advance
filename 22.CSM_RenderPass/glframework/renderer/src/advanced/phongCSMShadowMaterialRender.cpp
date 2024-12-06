@@ -10,13 +10,13 @@
 #include "../../../../application/camera/include/orthographicCamera.h"
 
 void Renderer::phongCSMShadowMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
-                                           const std::shared_ptr<Material> &material,
-                                           const std::shared_ptr<Camera> &camera,
-                                           const std::shared_ptr<Mesh> &mesh,
-                                           const std::shared_ptr<DirectionalLight> &directionalLight,
-                                           const std::vector<std::shared_ptr<PointLight>> &pointLights,
-                                           const std::shared_ptr<SpotLight> &spotLight,
-                                           const std::shared_ptr<AmbientLight> &ambientLight)
+                                            const std::shared_ptr<Material> &material,
+                                            std::shared_ptr<Camera> &camera,
+                                            const std::shared_ptr<Mesh> &mesh,
+                                            const std::shared_ptr<DirectionalLight> &directionalLight,
+                                            const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                            const std::shared_ptr<SpotLight> &spotLight,
+                                            const std::shared_ptr<AmbientLight> &ambientLight)
 {
         auto phongMaterial = (PhongCSMShadowMaterial *) material.get();
         auto dirCSMShadow = std::dynamic_pointer_cast<DirectionalLightCSMShadow>(directionalLight->mShadow);
@@ -30,20 +30,29 @@ void Renderer::phongCSMShadowMaterialRender(const std::shared_ptr<Shader> &shade
 
         /* 法线贴图 */
 
-        /* shadowMap */
+        /* csm */
         shaderPtr->setInt("csmLayerCount", dirCSMShadow->mLayerCount);
-        std::vector<float> layers;
-        dirCSMShadow->generateCascadeLayers(layers,
-                                            dirCSMShadow->mCamera->mNear,
-                                            dirCSMShadow->mCamera->mFar);
+        std::vector<float> layers{};
+        dirCSMShadow->generateCascadeLayers(layers, camera->mNear, camera->mFar);
         shaderPtr->setVectorFloat("csmLayers", layers.data(), (int) layers.size());
-        // shaderPtr->setInt("shadowMapSampler", 2);
-        // dirShadow->mRenderTarget->mDepthAttachment->setUnit(2);
-        // dirShadow->mRenderTarget->mDepthAttachment->bind();
-        // auto lightMatrix = dirShadow->getLightMatrix(directionalLight->getModelMatrix());
-        // shaderPtr->setMatrix<decltype(lightMatrix)>("lightMatrix", lightMatrix);
-        // shaderPtr->setMatrix<decltype(glm::inverse(directionalLight->getModelMatrix()))>("lightViewMatrix",
-        //                                                           glm::inverse(directionalLight->getModelMatrix()));
+
+        /* shadowMap */
+        shaderPtr->setInt("shadowMapSampler", 2);
+        dirCSMShadow->mRenderTarget->mDepthAttachment->setUnit(2);
+        dirCSMShadow->mRenderTarget->mDepthAttachment->bind();
+        auto lightMatrices = DirectionalLightCSMShadow::getLightMatrices(camera,
+                                                                         directionalLight->getDirection(),
+                                                                         layers);
+        shaderPtr->setMatrixArray("lightMatrices", lightMatrices.data(), (int) lightMatrices.size());
+
+        /* shadowMap bias */
+        shaderPtr->setFloat("bias", dirCSMShadow->mBias);
+
+        /* DiskThickness */
+        shaderPtr->setFloat("diskTightness", dirCSMShadow->mDiskTightness);
+
+        /* PcfRadius */
+        shaderPtr->setFloat("pcfRadius", dirCSMShadow->mPcfRadius);
 
         /* 透明度 */
         shaderPtr->setFloat("opacity", phongMaterial->mOpacity);

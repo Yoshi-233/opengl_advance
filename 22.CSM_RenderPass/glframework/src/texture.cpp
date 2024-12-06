@@ -224,28 +224,25 @@ std::shared_ptr<Texture> Texture::createDepthAttachmentCSMArray(unsigned int uni
 {
         std::shared_ptr<Texture> dTexture = std::make_shared<Texture>();
 
-        unsigned int depths;
-        glGenTextures(1, &depths);
-        glBindTexture(GL_TEXTURE_2D_ARRAY, depths);
-        glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height,
-                layerNum, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+        unsigned int depth;
+        glGenTextures(1, &depth);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, depth);
+
+        glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT, width, height, layerNum, 0, GL_DEPTH_COMPONENT,
+                     GL_FLOAT, NULL);
 
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        // GL_CLAMP_TO_BORDER 超出边界时使用边界颜色
-        GLfloat borderColor[] = {0.0f, 0.0f, 0.0f, 0.0f}; // 因为用的深度，这里代表深度为1.0，最大深度值
+        GLfloat borderColor[] = {0.0, 0.0, 0.0, 0.0};
         glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);
-        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);//u
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);//v
         glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 
-        dTexture->mTexture = depths;
-        dTexture->mUnit = unit;
+        dTexture->mTexture = depth;
         dTexture->mWidth = width;
         dTexture->mHeight = height;
-        // 兼容考虑，这样bind的时候根据成员变量来判断是2D还是2D_ARRAY
+        dTexture->mUnit = unit;
         dTexture->mTextureTarget = GL_TEXTURE_2D_ARRAY;
 
         return dTexture;

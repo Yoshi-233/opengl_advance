@@ -33,7 +33,7 @@ public:
 
         // 聚光灯 + 点光源 + 平行光
         void render(const std::shared_ptr<Scene> &scene,
-                    const std::shared_ptr<Camera> &camera,
+                    std::shared_ptr<Camera> &camera,
                     const std::shared_ptr<DirectionalLight> &directionalLight,
                     const std::vector<std::shared_ptr<PointLight>> &pointLights,
                     const std::shared_ptr<SpotLight> &spotLight,
@@ -42,21 +42,21 @@ public:
 
         // 点光源
         void render(const std::shared_ptr<Scene> &scene,
-                    const std::shared_ptr<Camera> &camera,
+                    std::shared_ptr<Camera> &camera,
                     const std::shared_ptr<PointLight> &pointLight,
                     const std::shared_ptr<AmbientLight> &ambientLight,
                     unsigned int fbo = 0);
 
         // 平行光
         void render(const std::shared_ptr<Scene> &scene,
-                    const std::shared_ptr<Camera> &camera,
+                    std::shared_ptr<Camera> &camera,
                     const std::shared_ptr<DirectionalLight> &directionalLight,
                     const std::shared_ptr<AmbientLight> &ambientLight,
                     unsigned int fbo = 0);
 
 
         void renderObject(const std::shared_ptr<Object> &object,
-                          const std::shared_ptr<Camera> &camera,
+                          std::shared_ptr<Camera> &camera,
                           const std::shared_ptr<DirectionalLight> &directionalLight,
                           const std::vector<std::shared_ptr<PointLight>> &pointLights,
                           const std::shared_ptr<SpotLight> &spotLight,
@@ -150,14 +150,14 @@ private:
                                        const std::shared_ptr<SpotLight> &spotLight,
                                        const std::shared_ptr<AmbientLight> &ambientLight);
 
-        void phongCSMShadowMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
-                                          const std::shared_ptr<Material> &material,
-                                          const std::shared_ptr<Camera> &camera,
-                                          const std::shared_ptr<Mesh> &mesh,
-                                          const std::shared_ptr<DirectionalLight> &directionalLight,
-                                          const std::vector<std::shared_ptr<PointLight>> &pointLights,
-                                          const std::shared_ptr<SpotLight> &spotLight,
-                                          const std::shared_ptr<AmbientLight> &ambientLight);
+        static void phongCSMShadowMaterialRender(const std::shared_ptr<Shader> &shaderPtr,
+                                                 const std::shared_ptr<Material> &material,
+                                                 std::shared_ptr<Camera> &camera,
+                                                 const std::shared_ptr<Mesh> &mesh,
+                                                 const std::shared_ptr<DirectionalLight> &directionalLight,
+                                                 const std::vector<std::shared_ptr<PointLight>> &pointLights,
+                                                 const std::shared_ptr<SpotLight> &spotLight,
+                                                 const std::shared_ptr<AmbientLight> &ambientLight);
 
 private:
         // 渲染内部调用， 根据类型不同挑选

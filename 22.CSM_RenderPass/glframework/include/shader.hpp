@@ -89,7 +89,7 @@ void Shader::setMatrix(const std::string &name, mat_type &value) const
         } else if (std::is_same<mat_type, glm::mat2x4>::value) {
                 GL_CHECK_ERR(glUniformMatrix2x4fv(location, 1, GL_FALSE, glm::value_ptr(value)));
         } else {
-                ERROR("type error!");
+                ERROR("type error, mat_type:{}!", typeid(mat_type).name());
         }
 }
 

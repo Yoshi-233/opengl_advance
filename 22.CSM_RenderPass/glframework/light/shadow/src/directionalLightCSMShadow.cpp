@@ -19,8 +19,8 @@ void DirectionalLightCSMShadow::generateCascadeLayers(std::vector<float> &layers
 {
         layers.clear();
 
-        for(int i = 0; i <= this->mLayerCount; i++) {
-                float layer = near * glm::pow(far / near, (float)i / (float)this->mLayerCount);
+        for (int i = 0; i <= this->mLayerCount; i++) {
+                float layer = near * glm::pow(far / near, (float) i / (float) this->mLayerCount);
                 layers.push_back(layer);
         }
 }
@@ -38,7 +38,7 @@ glm::mat4 DirectionalLightCSMShadow::getLightMatrix(std::shared_ptr<Camera> &cam
 
         /* 2.光源方向, 8个角点的平均值作为光源的位置 */
         glm::vec3 center = glm::vec3(0.0f);
-        for(auto corner : corners) {
+        for (auto corner: corners) {
                 center += glm::vec3(corner);
         }
         center /= corners.size();
@@ -53,7 +53,7 @@ glm::mat4 DirectionalLightCSMShadow::getLightMatrix(std::shared_ptr<Camera> &cam
         float maxY = std::numeric_limits<float>::lowest();
         float minZ = std::numeric_limits<float>::max();
         float maxZ = std::numeric_limits<float>::lowest();
-        for(const auto& corner : corners) {
+        for (const auto &corner: corners) {
                 // 三维坐标转光源视角投影坐标
                 auto projCorner = lightViewMatrix * corner;
                 minX = std::min(minX, projCorner.x);
@@ -84,9 +84,9 @@ std::vector<glm::mat4> DirectionalLightCSMShadow::getLightMatrices(std::shared_p
                                                                    std::vector<float> &clips)
 {
         std::vector<glm::mat4> lightMatrices;
-        for(int i = 0; i < clips.size() - 1 ; i++) {
+        for (int i = 0; i < clips.size() - 1; i++) {
                 float near = clips[i];
-                float far = clips[i+1];
+                float far = clips[i + 1];
                 glm::mat4 lightMatrix = getLightMatrix(camera, LightDir, near, far);
                 lightMatrices.push_back(lightMatrix);
         }

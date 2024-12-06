@@ -41,19 +41,20 @@ void Renderer::renderShadowMap(std::shared_ptr<Camera> &camera,
         auto csmShadow = std::dynamic_pointer_cast<DirectionalLightCSMShadow>(directionalLight->mShadow);
         std::vector<float> layers;
         csmShadow->generateCascadeLayers(layers, camera->mNear, camera->mFar);
-        auto lightMatrices = csmShadow->getLightMatrices(camera, directionalLight->getDirection(),
-                                                         layers);
+        auto lightMatrices = DirectionalLightCSMShadow::getLightMatrices(camera, directionalLight->getDirection(),
+                                                                         layers);
 
         glBindFramebuffer(GL_FRAMEBUFFER, csmShadow->mRenderTarget->mFBO); // 绑定shadow map framebuffer
         glViewport(0, 0, csmShadow->mRenderTarget->mWidth, csmShadow->mRenderTarget->mHeight); // 设置viewport
 
         for (int i = 0; i < csmShadow->mLayerCount; i++) {
-                glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                glFramebufferTextureLayer(GL_FRAMEBUFFER,
+                                          GL_DEPTH_ATTACHMENT,
                                           csmShadow->mRenderTarget->mDepthAttachment->getTextureID(),
                                           0, i); // 绑定第i层shadow map
                 glClear(GL_DEPTH_BUFFER_BIT); // 清空深度缓冲
                 this->mShadowShader->begin();
-                this->mShadowShader->setMatrix<decltype(lightMatrices[i])>("lightMatrix", lightMatrices[i]);
+                this->mShadowShader->setMatrix<glm::mat4>("lightMatrix", lightMatrices[i]);
                 for (auto &mesh: meshes) {
                         auto geometry = mesh->getGeometry();
                         glBindVertexArray(geometry->getVao());
@@ -62,14 +63,14 @@ void Renderer::renderShadowMap(std::shared_ptr<Camera> &camera,
 
                         if (mesh->getType() == ObjectType::INSTANCED_MESH) {
                                 auto instanceMesh = (InstanceMesh *) mesh.get();
-                                glDrawElementsInstanced(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT, nullptr,
+                                glDrawElementsInstanced(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT,
+                                                        nullptr,
                                                         (int) instanceMesh->numInstanced);
                         } else {
                                 glDrawElements(GL_TRIANGLES, geometry->getIndicesCount(), GL_UNSIGNED_INT, nullptr);
                         }
                 }
-                this->mShadowShader->end();
-
+                Shader::end();
         }
 
         /* 5.恢复状态 */

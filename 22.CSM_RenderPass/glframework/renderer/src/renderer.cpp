@@ -185,7 +185,7 @@ void Renderer::processCommonInfo(const std::shared_ptr<Shader> &shaderPtr,
 }
 
 void Renderer::render(const std::shared_ptr<Scene> &scene,
-                      const std::shared_ptr<Camera> &camera,
+                      std::shared_ptr<Camera> &camera,
                       const std::shared_ptr<DirectionalLight> &directionalLight,
                       const std::vector<std::shared_ptr<PointLight>> &pointLights,
                       const std::shared_ptr<SpotLight> &spotLight,
@@ -201,8 +201,7 @@ void Renderer::render(const std::shared_ptr<Scene> &scene,
         Renderer::setGLInitStatus(scene, camera);
 
         /* 渲染shadowmap */
-        // this->renderShadowMap(this->mOpacityObjects, directionalLight,
-        //                       directionalLight->mShadow->mRenderTarget);
+        this->renderShadowMap(camera, this->mOpacityObjects, directionalLight);
 
         /* 2. 渲染两个队列, 注意必须按照顺序渲染 */
         /* 2.1 不透明物体 */
@@ -216,7 +215,7 @@ void Renderer::render(const std::shared_ptr<Scene> &scene,
         }
 }
 
-void Renderer::render(const std::shared_ptr<Scene> &scene, const std::shared_ptr<Camera> &camera,
+void Renderer::render(const std::shared_ptr<Scene> &scene,  std::shared_ptr<Camera> &camera,
                       const std::shared_ptr<DirectionalLight> &directionalLight,
                       const std::shared_ptr<AmbientLight> &ambientLight,
                       unsigned int fbo)
@@ -241,7 +240,7 @@ void Renderer::render(const std::shared_ptr<Scene> &scene, const std::shared_ptr
 }
 
 void Renderer::render(const std::shared_ptr<Scene> &scene,
-                      const std::shared_ptr<Camera> &camera,
+                      std::shared_ptr<Camera> &camera,
                       const std::shared_ptr<PointLight> &pointLight,
                       const std::shared_ptr<AmbientLight> &ambientLight,
                       unsigned int fbo)
@@ -267,7 +266,7 @@ void Renderer::render(const std::shared_ptr<Scene> &scene,
 }
 
 
-void Renderer::renderObject(const std::shared_ptr<Object> &object, const std::shared_ptr<Camera> &camera,
+void Renderer::renderObject(const std::shared_ptr<Object> &object, std::shared_ptr<Camera> &camera,
                             const std::shared_ptr<DirectionalLight> &directionalLight,
                             const std::vector<std::shared_ptr<PointLight>> &pointLights,
                             const std::shared_ptr<SpotLight> &spotLight,

@@ -6,8 +6,6 @@ layout (location = 2) in vec3 aNormal;
 out vec2 uv;
 out vec3 normal;
 out vec3 worldPosition;
-out vec4 lightSpaceClipCoord;// 光源空间内的裁剪坐标
-out vec3 lightSpacePosition; // 光源空间内的位置
 
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
@@ -33,6 +31,4 @@ void main()
 
         normal = normalMatrix * aNormal;
 
-        lightSpaceClipCoord = lightMatrix * transformPosition;
-        lightSpacePosition = (lightViewMatrix * transformPosition).xyz;
 }

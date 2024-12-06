@@ -44,7 +44,7 @@ Framebuffer::~Framebuffer()
 
 std::shared_ptr<Framebuffer> Framebuffer::createShadowFbo(int width, int height)
 {
-        auto fb =  std::make_shared<Framebuffer>();
+        auto fb = std::make_shared<Framebuffer>();
         fb->mWidth = width;
         fb->mHeight = height;
         /* 1.生成FBO对象并且绑定 */
@@ -73,7 +73,7 @@ std::shared_ptr<Framebuffer> Framebuffer::createShadowFbo(int width, int height)
 
 std::shared_ptr<Framebuffer> Framebuffer::createCSMShadowFbo(int width, int height, unsigned int layerNum)
 {
-        auto fb =  std::make_shared<Framebuffer>();
+        auto fb = std::make_shared<Framebuffer>();
         fb->mWidth = width;
         fb->mHeight = height;
         /* 1.生成FBO对象并且绑定 */
@@ -82,10 +82,10 @@ std::shared_ptr<Framebuffer> Framebuffer::createCSMShadowFbo(int width, int heig
 
         /* 2.创建深度附件，加入fbo */
         fb->mDepthAttachment
-                = Texture::createDepthAttachmentCSMArray(0, fb->mWidth, fb->mHeight, 0);
+                = Texture::createDepthAttachmentCSMArray(0, fb->mWidth, fb->mHeight, layerNum);
 
         glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, fb->mDepthAttachment->getTextureID(),
-                               0, 0);
+                                  0, 0);
 
         /* 3.检查fbo是否正确生成 */
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -95,7 +95,7 @@ std::shared_ptr<Framebuffer> Framebuffer::createCSMShadowFbo(int width, int heig
         // 禁止渲染到颜色缓冲, 显式声明
         glDrawBuffer(GL_NONE);
 
-        /* 4.解绑fbo */
+        /* 3.解绑fbo */
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         return fb;
 }
