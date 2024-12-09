@@ -165,14 +165,13 @@ void prepareAll()
                 {-3.5683f, -2.7041f, -7.0375f},
                 {-3.0233f, 5.2973f,  2.0394f},
                 {3.3926f,  6.9407f,  3.3232f},
-                {9.8015f,  -9.8498f, -7.3877f},
+                {9.8015f,  -9.8498f, 7.3877f},
                 {0.8651f,  -7.4239f, 1.6375f},
-                {2.8383f,  6.4851f,  -8.7925f},
+                {2.8383f,  6.4861f,  -8.7925f},
                 {3.0698f,  -8.5348f, -4.8735f},
                 {6.1476f,  2.2643f,  -5.0017f},
                 {6.7825f,  -4.7561f, -4.6169f},
-                {-8.0400f, -1.3347f, -7.2126f},
-                {0.0f,     0.0f,     0.0f}
+                {-8.0400f, -1.3347f, -7.2126f}
         };
 
         for (const auto &pos: positions) {
@@ -185,7 +184,6 @@ void prepareAll()
         auto sgeo = Geometry::createScreenPlane();
         auto smat = std::make_shared<ScreenMaterial>();
         smat->mScreenTexture = framebuffer->mColorAttachment;
-        // smat->mScreenTexture = renderer->mShadowFBO->mDepthAttachment;
         auto smesh = std::make_shared<Mesh>(sgeo, smat);
         sceneInScreen->addChild(smesh);
 
@@ -198,9 +196,10 @@ void prepareAll()
 
         /* 创建点光源 */
         auto pointLight = std::make_shared<PointLight>();
-        pointLight->setColor(glm::vec3(1.0f, 0.0f, 0.0f));
         pointLight->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-        pointLight->setParameters(65.0f);
+        pointLight->setK2(0.0017f);
+        pointLight->setK1(0.07f);
+        pointLight->setKc(1.0f);
         pointLight->setSpecularIntensity(1.0f);
         pointLights.push_back(pointLight);
 
