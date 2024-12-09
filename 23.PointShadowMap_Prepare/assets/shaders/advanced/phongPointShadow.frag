@@ -18,7 +18,7 @@ uniform vec3 cameraPosition;
 // 高光强度，由物体材质决定
 uniform float shiness;
 
-#define POINT_LIGHT_NUM 4
+#define POINT_LIGHT_NUM 1
 
 uniform float specularMaskFlag = 1.0f;
 uniform float pointLightsFlag = 1.0f;

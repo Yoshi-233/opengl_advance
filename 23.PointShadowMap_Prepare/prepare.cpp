@@ -149,51 +149,37 @@ void prepareAll()
         sceneOffScreen = std::make_shared<Scene>();
 
         // pass 01
-        auto groundGeo = Geometry::createPlane(20.0f, 500.0f);
-        auto mat = std::make_shared<PhongPointShadowMaterial>();
-        mat->setDiffuse(std::make_shared<Texture>("assets/textures/wall.jpg", 0, GL_SRGB_ALPHA));
-        mat->setShiness(32.0f);
-        auto groundMesh = std::make_shared<Mesh>(groundGeo, mat);
-        groundMesh->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-        groundMesh->rotateX(-90.0f);
-        sceneOffScreen->addChild(groundMesh);
+        auto roomGeo = Geometry::createBox(20.0f, true);
+        auto roomMat = std::make_shared<PhongPointShadowMaterial>();
+        roomMat->setDiffuse(std::make_shared<Texture>("assets/textures/wall.jpg", 0, GL_SRGB_ALPHA));
+        roomMat->setShiness(32.0f);
+        auto roomMesh = std::make_shared<Mesh>(roomGeo, roomMat);
+        sceneOffScreen->addChild(roomMesh);
 
-        for (int i = 0; i < 50; i++) {
-                auto geo = Geometry::createBox(1.5f);
-                auto mesh = std::make_shared<Mesh>(geo, mat);
-                mesh->setPosition(glm::vec3((float) (i % 3) * 3.0f, 0.0f, -(float) i / 3.0f * 3.0f));
-                sceneOffScreen->addChild(mesh);
+
+        auto boxGeo = Geometry::createBox(2.0f);
+        auto boxMat = std::make_shared<PhongPointShadowMaterial>();
+        boxMat->setDiffuse(std::make_shared<Texture>("assets/textures/box.png", 0, GL_SRGB_ALPHA));
+        boxMat->setShiness(32.0f);
+        std::vector<glm::vec3> positions = {
+                {-3.5683f, -2.7041f, -7.0375f},
+                {-3.0233f, 5.2973f,  2.0394f},
+                {3.3926f,  6.9407f,  3.3232f},
+                {9.8015f,  -9.8498f, -7.3877f},
+                {0.8651f,  -7.4239f, 1.6375f},
+                {2.8383f,  6.4851f,  -8.7925f},
+                {3.0698f,  -8.5348f, -4.8735f},
+                {6.1476f,  2.2643f,  -5.0017f},
+                {6.7825f,  -4.7561f, -4.6169f},
+                {-8.0400f, -1.3347f, -7.2126f},
+                {0.0f,     0.0f,     0.0f}
+        };
+
+        for (const auto &pos: positions) {
+                auto boxMesh = std::make_shared<Mesh>(boxGeo, boxMat);
+                boxMesh->setPosition(pos);
+                sceneOffScreen->addChild(boxMesh);
         }
-        // auto roomGeo = Geometry::createBox(20.0f, true);
-        // auto roomMat = std::make_shared<PhongPointShadowMaterial>();
-        // roomMat->setDiffuse(std::make_shared<Texture>("assets/textures/wall.jpg", 0, GL_SRGB_ALPHA));
-        // roomMat->setShiness(32.0f);
-        // auto roomMesh = std::make_shared<Mesh>(roomGeo, roomMat);
-        // sceneOffScreen->addChild(roomMesh);
-        //
-        //
-        // auto boxGeo = Geometry::createBox(2.0f);
-        // auto boxMat = std::make_shared<PhongPointShadowMaterial>();
-        // boxMat->setDiffuse(std::make_shared<Texture>("assets/textures/box.png", 0, GL_SRGB_ALPHA));
-        // boxMat->setShiness(32.0f);
-        // std::vector<glm::vec3> positions = {
-        //         {-3.5683f, -2.7041f, -7.0375f},
-        //         {-3.0233f, 5.2973f, 2.0394f},
-        //         {3.3926f, 6.9407f, 3.3232f},
-        //         {9.8015f, -9.8498f, -7.3877f},
-        //         {0.8651f, -7.4239f, 1.6375f},
-        //         {2.8383f, 6.4851f, -8.7925f},
-        //         {3.0698f, -8.5348f, -4.8735f},
-        //         {6.1476f, 2.2643f, -5.0017f},
-        //         {6.7825f, -4.7561f, -4.6169f},
-        //         {-8.0400f, -1.3347f, -7.2126f}
-        // };
-        //
-        // for (const auto &pos: positions) {
-        //         auto boxMesh = std::make_shared<Mesh>(boxGeo, boxMat);
-        //         boxMesh->setPosition(pos);
-        //         sceneOffScreen->addChild(boxMesh);
-        // }
 
         // pass 02
         auto sgeo = Geometry::createScreenPlane();
@@ -205,10 +191,18 @@ void prepareAll()
 
         /* 创建平行光 */
         directionalLight = std::make_shared<DirectionalLight>(false);
-        directionalLight->setPosition(glm::vec3(10.0f, 10.0f, 0.0f));
+        directionalLight->setPosition(glm::vec3(5.0f, 5.0f, 0.0f));
         directionalLight->rotateY(45.0f); // 逆时针45度
         directionalLight->rotateX(-45.0f);
         directionalLight->setSpecularIntensity(1.0f);
+
+        /* 创建点光源 */
+        auto pointLight = std::make_shared<PointLight>();
+        pointLight->setColor(glm::vec3(1.0f, 0.0f, 0.0f));
+        pointLight->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+        pointLight->setParameters(65.0f);
+        pointLight->setSpecularIntensity(1.0f);
+        pointLights.push_back(pointLight);
 
         /* 创建环境光 */
         ambLight = std::make_shared<AmbientLight>();

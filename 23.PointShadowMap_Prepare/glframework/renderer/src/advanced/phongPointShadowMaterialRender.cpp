@@ -43,32 +43,32 @@ void Renderer::phongPointShadowMaterialRender(const std::shared_ptr<Shader> &sha
         }
 
         for (const auto &pointLight: pointLights) {
-                auto pointShadow = std::dynamic_pointer_cast<PointLightShadow>(pointLight->mShadow);
-                shaderPtr->setInt("shadowMapSampler", 2);
-                pointShadow->mRenderTarget->mDepthAttachment->setUnit(2);
-                pointShadow->mRenderTarget->mDepthAttachment->bind();
-                auto lightMatrix = pointShadow->getLightMatrix(pointLight->getModelMatrix());
-                shaderPtr->setMatrix<decltype(lightMatrix)>("lightMatrix", lightMatrix);
-                shaderPtr->setMatrix<decltype(glm::inverse(pointLight->getModelMatrix()))>("lightViewMatrix",
-                                                                                           glm::inverse(
-                                                                                                   directionalLight->getModelMatrix()));
-                /* shadowMap bias */
-                shaderPtr->setFloat("bias", pointShadow->mBias);
-
-                /* DiskThickness */
-                shaderPtr->setFloat("diskTightness", pointShadow->mDiskTightness);
-
-                /* PcfRadius */
-                shaderPtr->setFloat("pcfRadius", pointShadow->mPcfRadius);
-
-                /* lightSize */
-                shaderPtr->setFloat("lightSize", pointShadow->mLightSize);
-
-                /* frustum && nearPlane */
-                auto shadowCamera = std::dynamic_pointer_cast<OrthographicCamera>(pointShadow->mCamera);
-                auto frustum = shadowCamera->mR - shadowCamera->mL;
-                shaderPtr->setFloat("frustum", frustum);
-                shaderPtr->setFloat("nearPlane", shadowCamera->mNear);
+                // auto pointShadow = std::dynamic_pointer_cast<PointLightShadow>(pointLight->mShadow);
+                // shaderPtr->setInt("shadowMapSampler", 2);
+                // pointShadow->mRenderTarget->mDepthAttachment->setUnit(2);
+                // pointShadow->mRenderTarget->mDepthAttachment->bind();
+                // auto lightMatrix = pointShadow->getLightMatrix(pointLight->getModelMatrix());
+                // shaderPtr->setMatrix<decltype(lightMatrix)>("lightMatrix", lightMatrix);
+                // shaderPtr->setMatrix<decltype(glm::inverse(pointLight->getModelMatrix()))>("lightViewMatrix",
+                //                                                                            glm::inverse(
+                //                                                                                    directionalLight->getModelMatrix()));
+                // /* shadowMap bias */
+                // shaderPtr->setFloat("bias", pointShadow->mBias);
+                //
+                // /* DiskThickness */
+                // shaderPtr->setFloat("diskTightness", pointShadow->mDiskTightness);
+                //
+                // /* PcfRadius */
+                // shaderPtr->setFloat("pcfRadius", pointShadow->mPcfRadius);
+                //
+                // /* lightSize */
+                // shaderPtr->setFloat("lightSize", pointShadow->mLightSize);
+                //
+                // /* frustum && nearPlane */
+                // auto shadowCamera = std::dynamic_pointer_cast<OrthographicCamera>(pointShadow->mCamera);
+                // auto frustum = shadowCamera->mR - shadowCamera->mL;
+                // shaderPtr->setFloat("frustum", frustum);
+                // shaderPtr->setFloat("nearPlane", shadowCamera->mNear);
         }
 
         /* 透明度 */

@@ -3,10 +3,10 @@
 
 DirectionalLightShadow::DirectionalLightShadow()
 {
-        float size = 50.0f;
+        float size = 10.0f;
         this->mCamera = std::make_shared<OrthographicCamera>(-size, size,
                                                              -size, size,
-                                                             0.1f, 200.0f);
+                                                             0.1f, 80.0f);
         this->mRenderTarget = Framebuffer::createShadowFbo(1024, 1024);
 }
 
